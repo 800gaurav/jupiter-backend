@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../jupiter-webiste-reactjs"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../jupiter-admin-reactjs"
+		}
+	],
+	"settings": {}
+}

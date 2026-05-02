@@ -1,0 +1,12 @@
+import { errorResponse } from "../utils/api-response.js"
+
+const requireAuth = (roles) => {
+  return (req, res, next) => {
+    console.log(req.currentUser)
+    if (!req.currentUser) return errorResponse(res, "Requires Authentication", 401);
+    if (!roles.includes(req.currentUser.role)) return errorResponse(res, "You don't have access to this route", 401);
+    next();
+  }
+}
+
+export { requireAuth }
