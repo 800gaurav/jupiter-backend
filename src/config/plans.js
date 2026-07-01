@@ -7,7 +7,6 @@ const SERVICE_PLANS = [
     "dailyPercent": 0.5,
     "dailyROI": "0.5%",
     "referral": "10%",
-    "teamBonus": "1%",
     "features": [
       "Staking Income (0.5% daily)",
       "40% staking amount withdrawable",
@@ -24,7 +23,6 @@ const SERVICE_PLANS = [
     "dailyPercent": 0.5,
     "dailyROI": "0.5%",
     "referral": "10%",
-    "teamBonus": "2%",
     "features": [
       "All Starter Benefits",
       "Higher Staking Rate",
@@ -41,7 +39,6 @@ const SERVICE_PLANS = [
     "dailyPercent": 0.5,
     "dailyROI": "0.5%",
     "referral": "10%",
-    "teamBonus": "2%",
     "features": [
       "All Silver Benefits",
       "10% Matching Income",
@@ -58,7 +55,6 @@ const SERVICE_PLANS = [
     "dailyPercent": 1,
     "dailyROI": "1%",
     "referral": "10%",
-    "teamBonus": "3%",
     "features": [
       "All Benefits Unlocked",
       "Higher binary pair cap",
@@ -84,10 +80,8 @@ const INCOME_PLAN = {
   },
   "teamGrowth": {
     "name": "Team Growth Bonus",
-    "minPercent": 1,
-    "maxPercent": 3,
-    "requiredDirects": 10,
-    "minimumIdAmount": 100
+    "percent": 1,
+    "requiredDirects": 10
   },
   "matching": {
     "name": "Matching Income",

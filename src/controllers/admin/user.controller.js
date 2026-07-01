@@ -104,7 +104,7 @@ const userController = {
     const user = await UserModel.findOne({ _id: userId });
     if (!user) return res.status(404).json({ message: "User not found" });
     const token = jwt.sign({ _id: user._id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRE });
-    successResponse(res, "Login as user URL generated", token);
+    successResponse(res, "Login as user URL generated", { token, userId: user.userId });
   },
 
   admindashboard: async (req, res) => {

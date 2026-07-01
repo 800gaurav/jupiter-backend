@@ -20,13 +20,6 @@ const updateLastRunDate = () => {
 };
 
 const runDailyJob = async () => {
-  const today = new Date().getDay();
-
-  if (today === 0 || today === 6) {
-    console.log("Weekend skip: no income job today.");
-    return;
-  }
-
   if (hasJobRunToday()) {
     console.log("Daily job already executed today, skipping.");
     return;

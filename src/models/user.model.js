@@ -84,6 +84,15 @@ const userSchema = new mongoose.Schema(
     royalyIncome: {type: Number, default: 0},
    domesticUnlockedLevel: { type: Number, default: 1 },
    proBonusIncome: {type: Number, default: 0},
+   teamBusinessIncome: { type: Number, default: 0 },
+   teamBusinessHistory: [
+     {
+       fromUser: { type: String },
+       baseAmount: { type: Number, default: 0 },
+       amount: { type: Number, default: 0 },
+       date: { type: Date, default: Date.now },
+     }
+   ],
    stopROIIncome: { type: Boolean, default: false },
 
    //Withdraw

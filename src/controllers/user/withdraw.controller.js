@@ -591,8 +591,16 @@ export const getWithdrawHistory = async (req, res) => {
     }
 
     console.log(filter)
-    const records = await WithdrawModel.find(filter).sort({ createdAt: -1 })
-    return successResponse(res, "Withdraw history fetched", records)
+    const records = await WithdrawModel.find(filter)
+      .populate({ path: 'userId', select: 'name withdrawTRC_ADDRESS withdrawBEP_ADDRESS' })
+      .sort({ createdAt: -1 })
+    const result = records.map(r => ({
+      ...r.toObject(),
+      userName: r.userId?.name || '',
+      withdrawTRC_ADDRESS: r.userId?.withdrawTRC_ADDRESS || '',
+      withdrawBEP_ADDRESS: r.userId?.withdrawBEP_ADDRESS || '',
+    }))
+    return successResponse(res, "Withdraw history fetched", result)
   } catch (err) {
     console.error("Withdraw history error:", err)
     return errorResponse(res, "Failed to fetch history", 500)

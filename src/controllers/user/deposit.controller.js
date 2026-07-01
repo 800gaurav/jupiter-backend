@@ -10,6 +10,43 @@ import { INCOME_PLAN, SERVICE_PLANS } from "../../config/plans.js";
 
 const round2 = (value) => Math.round((Number(value || 0) + Number.EPSILON) * 100) / 100;
 
+const creditTeamBusinessIncome = async ({ user, packageAmount }) => {
+  if (!user?.referrer) return;
+
+  const sponsor = await UserModel.findById(user.referrer).select(
+    "directreferaralCount userId walletBalance totalProfitEarned todayIncome teamBusinessIncome teamBusinessHistory"
+  );
+  if (!sponsor) return;
+
+  const requiredDirects = Number(INCOME_PLAN.teamGrowth?.requiredDirects || 10);
+  if (Number(sponsor.directreferaralCount || 0) < requiredDirects) return;
+
+  const percent = Number(INCOME_PLAN.teamGrowth?.percent || 1);
+  const income = Math.round(((Number(packageAmount || 0) * percent) / 100) * 100) / 100;
+  if (income <= 0) return;
+
+  const buyerCode = user.userId || String(user._id);
+  await UserModel.findOneAndUpdate(
+    { _id: sponsor._id },
+    {
+      $inc: {
+        walletBalance: income,
+        totalProfitEarned: income,
+        todayIncome: income,
+        teamBusinessIncome: income,
+      },
+      $push: {
+        teamBusinessHistory: {
+          fromUser: buyerCode,
+          baseAmount: packageAmount,
+          amount: income,
+          date: new Date(),
+        },
+      },
+    }
+  );
+};
+
 const creditSponsorIncome = async ({ user, packageAmount, orderId }) => {
   if (!user?.referrer) return;
 
@@ -134,6 +171,7 @@ export const initiatePayment = async (req, res) => {
       await user.save();
       await updateBinaryBusinessAndMatching(user._id, packageAmount);
       await creditSponsorIncome({ user, packageAmount, orderId: `fund-wallet-${Date.now()}` });
+      await creditTeamBusinessIncome({ user, packageAmount });
 
       return res.status(200).json({ success: true, message: "Package purchased successfully from Fund Wallet." });
     }
@@ -266,6 +304,7 @@ export const oxapayCallback = async (req, res) => {
 
         if (isPackagePayment) {
           await creditSponsorIncome({ user: updatedUser, packageAmount, orderId: order_id });
+          await creditTeamBusinessIncome({ user: updatedUser, packageAmount });
         }
       }
     }
