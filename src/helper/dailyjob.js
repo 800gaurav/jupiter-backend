@@ -36,7 +36,7 @@ const runDailyJob = async () => {
 
 let isRunning = false;
 
-cron.schedule("0 6 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   if (isRunning) {
     console.log("Daily job already running, skipping.");
     return;
